@@ -47,9 +47,9 @@ void main_Menu()
 	}
 	
 	switch (choice) {
-	case '1':  login_page(); // if user input '1' then call function login_page
+	case 1:  login_page(); // if user input '1' then call function login_page
 		break;
-	case '2': forgot_password(); // if user input '2' then call function forgot_password
+	case 2: forgot_password(); // if user input '2' then call function forgot_password
 		break;
 	}
 }
