@@ -1,3 +1,4 @@
+
 // Final_Project.cpp : Defines the entry point for the console application.
 //
 
@@ -6,6 +7,7 @@
 #include <ctime>
 #include <string>
 #include <cstdlib>
+#include <fstream>
 using namespace std;
 
 void main_Menu();
@@ -20,7 +22,7 @@ string nameLogin;
 
 int main()
 {
-	main_Menu();
+	main_Menu(); // call main_menu();
 
 
 
@@ -29,7 +31,7 @@ int main()
 
 void main_Menu()
 {
-	int choice,displayTicket;
+	int choice,displayTicket; 
 	cout << "-------------------------------------------------------------" << endl;
 	cout << "                       WELCOME TO                            " << endl;
 	cout << "                   BANK CENTRAL AFRICA                       " << endl;
@@ -44,12 +46,12 @@ void main_Menu()
 	{
 		cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
 		cin >> choice;
+	cout << choice;
 	}
-	
 	switch (choice) {
-	case '1':  login_page(); // if user input '1' then call function login_page
+	case 1:  login_page(); // if user input '1' then call function login_page
 		break;
-	case '2': forgot_password(); // if user input '2' then call function forgot_password
+	case 2: forgot_password(); // if user input '2' then call function forgot_password
 		break;
 	}
 }
@@ -58,9 +60,9 @@ void login_page()
 {
 	bool validateLogin;
 	string nameLogin, passLogin;
-	cout << "Enter Username :";
+	cout << "Enter Username : \n";
 	cin >> nameLogin;
-	cout << "Enter Password : ";
+	cout << "Enter Password : \n";
 	cin >> passLogin;
 	validateLogin = login_validation(nameLogin, passLogin);
 }
@@ -84,6 +86,7 @@ void forgot_password()
 
 bool login_validation(string usrName, string pin)
 {
+	
 	bool validate = false;
 	if (usrName == "daniel" && pin == "123456")
 	{
