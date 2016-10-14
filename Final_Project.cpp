@@ -51,7 +51,6 @@ void main_Menu()
 	{
 		cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
 		cin >> choice;
-	cout << choice;
 	}
 	switch (choice) {
 	case 1:  login_page(); // if user input '1' then call function login_page
@@ -65,27 +64,26 @@ void main_Menu()
 
 void login_page() 
 {
-	clearScreen();
-	bool validateLogin=false;
-	string nameLogin, passLogin;
-	do{
+	clearScreen(); 								// clear screen 
+	bool validateLogin=false;					// set initial value of validateLogin as false 
+	string nameLogin, passLogin;				// declare string variables as input for argument login_Validation 
+	do{											// do syntax
+	cout << "Enter Username : \n";				// prompt user to input username
+	cin >> nameLogin;							// store nameLogin string
+	cout << "Enter Password : \n";				// prompt user to input username
+	cin >> passLogin;							// store passLogin string
+	validateLogin = login_validation(nameLogin, passLogin);			// error start here
 	
-	cout << "Enter Username : \n";
-	cin >> nameLogin;
-	cout << "Enter Password : \n";
-	cin >> passLogin;
-	validateLogin = login_validation(nameLogin, passLogin);
-	
-	if(validateLogin)
+	if(validateLogin) // check ????
 	{
 		clearScreen();
 		account_Page();
 	}
 	else 
-		cout << "Wrong Username/PIN. Please enter correct one!.\n";
+		cout << "Invalid input, enter correct username/password!.\n";
 	
 	
-}while(!validateLogin);
+}while(!validateLogin); // error maybe end from here
 
 }
 
@@ -108,31 +106,41 @@ void forgot_password()
 	cout << "PLEASE KEEP THIS TICKET NUMBER TO CONTACT US.\n";
 	cout << "--------------------------------------------\n";
 	
+	
+	do {
+		
 	cout << "Enter 1 to Main Menu" << endl;
 	cout << "Enter 2 to Exit" << endl;
 	cin >> choice;
-	do{
 	
-	if(choice <=1 || choice >3)
-	{
+	switch (choice){
+	
+	case 1 : {
+		goOn = true;
 		clearScreen();
-		goOn=true;
 		main_Menu();
+		break;
 	}
-	else {
-		cout << "Enter 1 or 2 only!.\n";
-	}
-}while(!goOn);
+	case 2 :{
+		cout << "Exit Now.";
+		break;
 }
 
+	default : {
+		cout <<"Invalid input 1 or 2 only.";
+		break;
+		}
+	}
+		
+}while (goOn);
+}
 
 bool login_validation(string usrName, string pin)
 {
-	
 	bool validate; //set initial boolean validate value to false.
 	if (usrName == "daniel" && pin == "123456") // condition if 
 	{
-		bool validate = true; //flaggg
+		bool validate = true; //flaggg , true bool validate is true if the usrName and pin input are correct.
 	}
 	else
 	{
