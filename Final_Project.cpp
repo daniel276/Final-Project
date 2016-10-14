@@ -8,6 +8,7 @@
 #include <string>
 #include <cstdlib>
 #include <fstream>
+#include <windows.h>
 using namespace std;
 
 void main_Menu();
@@ -17,7 +18,7 @@ void forgot_password();
 void generate_Ticket_Number();
 void clearScreen();
 void account_Page();
-
+void sleep(unsigned);
 string nameLogin;
 string UsrName;
 
@@ -35,7 +36,8 @@ int main()
 
 void main_Menu()
 {
-	int choice,displayTicket; 
+	int choice;
+	int displayTicket; 
 	cout << "-------------------------------------------------------------" << endl;
 	cout << "                       WELCOME TO                            " << endl;
 	cout << "                   BANK CENTRAL AFRICA                       " << endl;
@@ -47,7 +49,7 @@ void main_Menu()
 	cout << "2.\t FORGOT PASSWORD" << endl;
 	cout << "Enter your choice (1-2)" << endl;
 	cin >> choice;
-	while (choice <0 || choice >2) // Validate input
+	while (choice <0 || choice >3) // Validate input
 	{
 		cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
 		cin >> choice;
@@ -66,24 +68,25 @@ void login_page()
 {
 	clearScreen(); 								// clear screen 
 	bool validateLogin=false;					// set initial value of validateLogin as false 
-	string nameLogin, passLogin;				// declare string variables as input for argument login_Validation 
+	string nameLogin, passLogin;					// declare string variables as input for argument login_Validation 
+	
+	
 	do{											// do syntax
 	cout << "Enter Username : \n";				// prompt user to input username
 	cin >> nameLogin;							// store nameLogin string
 	cout << "Enter Password : \n";				// prompt user to input username
 	cin >> passLogin;							// store passLogin string
-	validateLogin = login_validation(nameLogin, passLogin);			// error start here
+	validateLogin = login_validation(nameLogin, passLogin);			
 	
-	if(validateLogin) // check ????
+	if(validateLogin ==1) 						// if validateLogin accept true value then proceed
 	{
-		clearScreen();
-		account_Page();
+		clearScreen();							// clear screen 
+		account_Page();							// go to account_Page function
 	}
 	else 
 		cout << "Invalid input, enter correct username/password!.\n";
 	
-	
-}while(!validateLogin); // error maybe end from here
+}while(validateLogin!=1); 
 
 }
 
@@ -140,11 +143,11 @@ bool login_validation(string usrName, string pin)
 	bool validate; //set initial boolean validate value to false.
 	if (usrName == "daniel" && pin == "123456") // condition if 
 	{
-		bool validate = true; //flaggg , true bool validate is true if the usrName and pin input are correct.
+	        validate = true; //flaggg , true bool validate is true if the usrName and pin input are correct.
 	}
 	else
 	{
-		bool validate = false;
+		 validate = false;
 	}
 	return validate;
 }
@@ -154,12 +157,53 @@ void clearScreen() //function to clear the screen
     cout << string( 100, '\n' );
     }
 
-void account_Page(){
-	cout << "-------------------------------------------";
-	cout << "Hi, [usrName]";
+void account_Page(){ // start func account_Page()
+	int choice;
+	ifstream userAccount;
+	userAccount.open("userDetails.txt");
+	clearScreen();
+	string usrName, usrBalance;
+	getline(userAccount, usrName, '|');
+	sleep(1500);
+	cout << "---------------------------------------------------\n";
+	cout << "Hi, " << usrName << endl;
 	cout << endl;
-	cout << "-------------------------------------------";
+	cout << endl;
+	cout << endl;
+	cout << endl;
+	cout << "---------------------------------------------------\n";
+	
+	sleep(750);
+	cout << "1. Check Balance \n";
+	cout << "2. Funds Transfer \n";
+	cout << "3. Select Payment \n";
+	cout << "4. Mini Statements \n";
+	cout << "5. Account Settings \n";
+	cout << "6. Cancel \n";
+	
+	cout << "Enter your choice: \n";
+	
+	cin >> choice;
+	
+	
+	
+} // end func account_Page()
+
+void check_Balance(){
+	clearScreen();
+	ifstream accountDetails;
+	
+	cout << "Your Balance is : \n";
+	
 }
+
+void sleep(unsigned milliseconds)
+    {
+        Sleep(milliseconds);
+    }
+
+
+
 
 /*void date_Time() {
 	time_t now = time(0);
