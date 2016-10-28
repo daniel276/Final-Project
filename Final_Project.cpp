@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <iomanip>
-#include <ctime>
-#include <string>
 #include <cstdlib>
 #include <fstream>
 #include "accountData.h" // call header file accountData.h which contain struct and link to here.
@@ -16,15 +14,14 @@ void main_Menu();
 bool login_validation(string usrName, string pin);
 void login_page();
 void forgot_password();
-void generate_Ticket_Number();
 void clearScreen();
 void account_Page();
-void sleep(unsigned);
+//void sleep(unsigned);
 
 int main()
 {
-	clearScreen();
-	main_Menu(); // call main_menu();
+    clearScreen();
+    main_Menu(); // call main_menu();
 
 
 
@@ -33,163 +30,177 @@ int main()
 
 void main_Menu()
 {
-	int choice;
-	int displayTicket;
-	cout << "-------------------------------------------------------------" << endl;
-	cout << "                       WELCOME TO                            " << endl;
-	cout << "                   BANK CENTRAL AFRICA                       " << endl;
-	cout << "                     ONLINE BANKING                          " << endl;
-	cout << "-------------------------------------------------------------" << endl;
+    int choice;
+    cout << "-------------------------------------------------------------" << endl;
+    cout << "                       WELCOME TO                            " << endl;
+    cout << "                   BANK CENTRAL AFRICA                       " << endl;
+    cout << "                     ONLINE BANKING                          " << endl;
+    cout << "-------------------------------------------------------------" << endl;
 
 
-	cout << "1.\t LOGIN" << endl;
-	cout << "2.\t FORGOT PASSWORD" << endl;
-	cout << "Enter your choice (1-2)" << endl;
-	cin >> choice;
-	while (choice <0 || choice >3) // Validate input
-	{
-		cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
-		cin >> choice;
-	}
-	switch (choice) {
-	case 1:  login_page(); // if user input '1' then call function login_page
-		break;
-	case 2: forgot_password(); // if user input '2' then call function forgot_password
-		break;
+    cout << "1.\t LOGIN" << endl;
+    cout << "2.\t FORGOT PASSWORD" << endl;
+    cout << "Enter your choice (1-2)" << endl;
+    cin >> choice;
+    while (choice <0 || choice >3) // Validate input
+    {
+        cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
+        cin >> choice;
+    }
+    switch (choice) {
+        case 1:  login_page(); // if user input '1' then call function login_page
+            break;
+        case 2: forgot_password(); // if user input '2' then call function forgot_password
+            break;
 
-	}
-	void ClearScreen();
+    }
+    void ClearScreen();
 }
 
 void login_page()
 {
-    accountData logindata;                      // declare logindata struct
-	clearScreen(); 								// clear screen
-	bool validateLogin=false;					// set initial value of validateLogin as false
-                                                // declare string variables as input for argument login_Validatio
-	do{											// do while syntax .. .
-	cout << "Enter Username : \n";				// prompt user to input username
-	cin >> logindata.usrLogin;					// store nameLogin string
-	cout << "Enter Password : \n";				// prompt user to input username
-	cin >> logindata.password;					// store passLogin string
-	validateLogin = login_validation(logindata.usrLogin, logindata.password);
+    clearScreen();                              // call clear screen
+    accountData logindata;                      // declare logindata class
+    bool validateLogin=false;					// set initial value of validateLogin as false
+    // declare string variables as input for argument login_Validatio
+    do{								        			// do while syntax .. .
+        cout << "Enter Username : \n";  				// prompt user to input username
+        cin >> logindata.username;        			// store nameLogin string
+        cout << "Enter Password : \n";	    			// prompt user to input username
+        cin >> logindata.password;   					// store passLogin string
+        validateLogin = login_validation(logindata.username,logindata.password);
 
-	if(validateLogin ==1) 						// if validateLogin accept true value then proceed
-	{
-		clearScreen();							// clear screen
-		account_Page();							// go to account_Page function
-	}
-	else
-		cout << "INVALID INPUT. ENTER CORRECT USERNAME/PASSWORD!.\n"; //display if login input is false
+        if(validateLogin ==1) 						// if validateLogin accept true value then proceed
+        {
+            clearScreen();							// clear screen
+            account_Page();							// go to account_Page function
+        }
+        else
+            cout << "INVALID INPUT. ENTER CORRECT USERNAME/PASSWORD!.\n"; //display if login input is false
 
-}while(validateLogin!=1); // keep repeating loop while the
+    }while(validateLogin!=1); // keep repeating loop while login input aren't correctly entered.
 
 }
 
 void forgot_password()
 {
-	bool goOn=false; // initial value set to false
-	int choice; // variable to store user's choice
-	clearScreen(); // call clearScreen function
-	const int MIN_VALUE = 1000000; // set min value of random-number generated
-	const int MAX_VALUE = 9999999; // max value of random-numer generated
-	int ticket_Number;
-	unsigned seed = time(0);
+    bool goOn=false; // initial value set to false
+    int choice; // variable to store user's choice
+    clearScreen(); // call clearScreen function
+    const int MIN_VALUE = 1000000; // set min value of random-number generated
+    const int MAX_VALUE = 9999999; // max value of random-numer generated
+    int ticket_Number;             // declare ticket_Number variable
+    unsigned seed = (unsigned int) time(0);        // seed generated by time
 
-	srand(seed);
+    srand(seed);
 
-	ticket_Number = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE;
-	cout << "--------------------------------------------\n";
-	cout << "          WE'VE MADE YOU A TICKET           \n";
-	cout << "\t  Ticket Number : " << ticket_Number << endl;
-	cout << "PLEASE KEEP THIS TICKET NUMBER TO CONTACT US.\n";
-	cout << "--------------------------------------------\n";
+    ticket_Number = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE; // formula to generate random-number
+    cout << "--------------------------------------------\n";           // display
+    cout << "          WE'VE MADE YOU A TICKET           \n";           // display
+    cout << "\t  Ticket Number : " << ticket_Number << endl;            // display
+    cout << "PLEASE KEEP THIS TICKET NUMBER TO CONTACT US.\n";          // display
+    cout << "--------------------------------------------\n";           // display
 
 
-	do {
+    do {        // do start
 
-	cout << "Enter 1 to Main Menu" << endl;
-	cout << "Enter 2 to Exit" << endl;
-	cin >> choice;
+        cout << "Enter 1 to Main Menu" << endl;     // display choice 1
+        cout << "Enter 2 to Exit" << endl;          // display choice 2
+        cin >> choice;                              // prompt user to enter choice;
 
-	switch (choice){
+        switch (choice){                            // switch statement start
 
-	case 1 : {
-		goOn = true;
-		clearScreen();
-		main_Menu();
-		break;
-	}
-	case 2 :{
-		cout << "Exit Now.";
-		break;
-}
+            case 1 : {                              // case 1
+                goOn = true;                        //
+                clearScreen();                      // clear screen func
+                main_Menu();                        // go to main_Menu()
+                break;                              // break statement if case 1 fulfill
+            }
+            case 2 :{                               // case 2
+                cout << "Exit Now.";                // display exit
+                break;                              // break statement ifcase 2 fulfill
+            }
 
-	default : {
-		cout <<"Invalid input 1 or 2 only.";
-		break;
-		}
-	}
+            default : {                                             // default switch
+                cout <<"INVALID INPUT. ENTER 1 OR 2 ONLY!.";        // display
+                break;                                              // break
+            }
+        }
 
-}while (goOn);
+    }while (goOn);
 }
 
 bool login_validation(string usrName, string pin)
 {
-	bool validate; //set initial boolean validate value to false.
-	if (usrName == "daniel" && pin == "123456") // condition if
-	{
-	        validate = true; // bool return true if the usrName and pin input are correct.
-	}
-	else
-	{
-		 validate = false; //flaggg , bool return false if the usrName and pin input are correct.
-	}
-	return validate; // return above value
+    accountData logindata;
+    ifstream data;
+    data.open("LoginData.txt");
+
+
+
+        bool validate = 0; //set initial boolean validate value to false.
+        if (usrName == logindata.username && pin == logindata.password) // condition if
+        {
+            return validate = true; // bool return true if the usrName and pin input are correct.
+
+
+        } else {
+            return validate = false; //flaggg , bool return false if the usrName and pin input are correct
+
+        }
+
+
 }
 
 void clearScreen() //function to clear the screen
-    {
+{
     cout << string( 100, '\n' );
-    }
+}
 
 void account_Page(){ // start func account_Page()
     accountData logindata;
-	int choice;
-	ifstream userAccount;
-	userAccount.open("userDetails.txt");
-	clearScreen();
-	string usrName, usrBalance;
-	getline(userAccount, usrName, '|');
-	cout << "---------------------------------------------------\n";
-	cout << "Hi, " << usrName << endl;
-	cout << endl;
-	cout << endl;
-	cout << endl;
-	cout << endl;
-	cout << "---------------------------------------------------\n";
+    int choice;
+    ifstream userAccount;
+    if(userAccount.good()){
+        userAccount.open("userDetails.txt");
+    }
+    else {
+        cout << "SOME FILES ARE MISSING. PLEASE CONTACT ADMINISTRATOR!.\n";
+    }
 
 
-	cout << "1. Check Balance \n";
-	cout << "2. Funds Transfer \n";
-	cout << "3. Select Payment \n";
-	cout << "4. Mini Statements \n";
-	cout << "5. Account Settings \n";
-	cout << "6. Cancel \n";
+    clearScreen();
+    string usrName, usrBalance;
+    getline(userAccount, usrName, '|');
+    cout << "---------------------------------------------------\n";
+    cout << "Hi, " << usrName << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << "---------------------------------------------------\n";
 
-	cout << "Enter your choice: \n";
 
-	cin >> choice;
+    cout << "1. Check Balance \n";
+    cout << "2. Funds Transfer \n";
+    cout << "3. Select Payment \n";
+    cout << "4. Mini Statements \n";
+    cout << "5. Account Settings \n";
+    cout << "6. Cancel \n";
 
+    cout << "Enter your choice: \n";
 
+    cin >> choice;
+
+    userAccount.close();
 
 } // end func account_Page()
 
 void check_Balance(){
-	clearScreen();
-	ifstream accountDetails; // get balanceData from text file..
+    clearScreen();
+    ifstream accountDetails; // get balanceData from text file..
 
-	cout << "Your Balance is : \n";
+    cout << "Your Balance is : \n";
 
 }
 
@@ -209,4 +220,3 @@ int cancel_Select(){
 
 	cout << dt;
 }*/
-

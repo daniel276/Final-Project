@@ -1,12 +1,16 @@
 #ifndef ACCOUNTDATA_H_INCLUDED
 #define ACCOUNTDATA_H_INCLUDED
-
 #include <string>
-struct accountData {
+class accountData {
+public:
+    int ID;
     std::string name;
-    std::string usrLogin;
+    std::string username;
     std::string password;
-    std::string balance;
+    std::string address;
+    double balance;
+
+
 
 };
 
