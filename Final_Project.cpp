@@ -6,9 +6,6 @@
 #include <cstdlib>
 #include <fstream>
 #include "accountData.h" // call header file accountData.h which contain struct and link to here.
-using namespace std;
-
-
 
 void main_Menu();
 bool login_validation(string usrName, string pin);
@@ -59,16 +56,18 @@ void main_Menu()
 
 void login_page()
 {
+    accountData login;
+    string username, password;
     clearScreen();                              // call clear screen
     accountData logindata;                      // declare logindata class
     bool validateLogin=false;					// set initial value of validateLogin as false
     // declare string variables as input for argument login_Validatio
     do{								        			// do while syntax .. .
         cout << "Enter Username : \n";  				// prompt user to input username
-        cin >> logindata.username;        			// store nameLogin string
+        cin >> username;        			// store nameLogin string
         cout << "Enter Password : \n";	    			// prompt user to input username
-        cin >> logindata.password;   					// store passLogin string
-        validateLogin = login_validation(logindata.username,logindata.password);
+        cin >> password;   					// store passLogin string
+        validateLogin = login_validation(username,password);
 
         if(validateLogin ==1) 						// if validateLogin accept true value then proceed
         {
@@ -135,15 +134,13 @@ bool login_validation(string usrName, string pin)
     accountData logindata;
     ifstream data;
     data.open("LoginData.txt");
-
+    // here open file to replace the test
 
 
         bool validate = 0; //set initial boolean validate value to false.
-        if (usrName == logindata.username && pin == logindata.password) // condition if
+        if (usrName == "test" && pin == "testpass") // condition if
         {
             return validate = true; // bool return true if the usrName and pin input are correct.
-
-
         } else {
             return validate = false; //flaggg , bool return false if the usrName and pin input are correct
 

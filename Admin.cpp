@@ -9,6 +9,7 @@ using namespace std;
 void login_Page();
 void disp();
 void admin_Page();
+int exit_select();
 void add_Account();
 int generateID();
 int main(){
@@ -22,7 +23,8 @@ int main(){
 
 
 bool validate_Login(string username, string password) {
-    if(username=="admin" && password=="lol"){
+    Admin get;
+    if(username==get.getAdminUsr() && password==get.getPass()){
         return true;
     }
     else
@@ -35,6 +37,7 @@ bool validate_Login(string username, string password) {
 
 void login_Page() {
     bool loginValidation;
+    string username,password;
     accountData admin;
     cout << "-----------------------------------" << endl;
     cout << "        BANK CENTRAL AFRICA        " << endl;
@@ -44,10 +47,10 @@ void login_Page() {
     cout << endl;
     do {
         cout << "ENTER USERNAME : \n";
-        cin >> admin.username;
+        cin >> username;
         cout << "ENTER PASSWORD : \n";
-        cin >> admin.password;
-        loginValidation = validate_Login(admin.username, admin.password);
+        cin >> password;
+        loginValidation = validate_Login(username, password);
 
         if (loginValidation) {
             admin_Page();
@@ -59,37 +62,47 @@ void login_Page() {
 void admin_Page() {
     int choice;
     cout << "1. ADD ACCOUNT\n";
+    cout << "2. Exit\n";
     cout << "ENTER CHOICE : \n";
     cin >> choice;
 
     switch(choice){
         case 1: add_Account();
+        case 2: exit_select();
+        default: cout << "ERROR";
 
     }
 }
 
 void add_Account(){
     accountData getData;
-    accountData *ptr = &getData;
-    fstream fileAdd;
-    fileAdd.open("");
+    string name,username,password,address;
+    int balance;
     cout << "ENTER FULL NAME : ";
-    cin >> getData.name;
+    getline(cin,name);
+    cin.ignore();
 
     cout << "ENTER USERNAME : ";
-    cin >> getData.username;
+    cin >> username;
 
     cout << "ENTER PASSWORD : ";
-    cin >> getData.password;
+    cin >> password;
 
     cout << "ENTER ADDRESS,CITY,STATE : ";
-    cin >> getData.address;
+    cin >> address;
 
-    cout << "ENTER INITIAL BALANCE : ";
-    cin >> getData.balance;
+    cout << "ENTER INITIAL BALANCE : $";
+    cin >> balance;
 
-    ofstream writeFile;
-    writeFile.open("");
+    getData.setName(name);
+    getData.setUserName(username);
+    getData.setAddress(address);
+    getData.setBalance(balance);
+
+    int id = generateID();
+    fstream write;
+    write.open("id",ios::out);
+
 }
 
 void disp(){
@@ -104,4 +117,9 @@ int generateID(){
     int x = dist(generator);
     return x;
 
+}
+
+int exit_select(){
+    cout << "Now Exit.";
+   return 0;
 }
