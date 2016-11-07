@@ -1,23 +1,36 @@
 #ifndef ACCOUNTDATA_H_INCLUDED
 #define ACCOUNTDATA_H_INCLUDED
 #include <string>
+#include <ctime>
+#include <fstream>
 using namespace std;
-class accountData {
+class AccountData {
 private:
-    int ID;
-    std::string name;
+    string ID;
+    std::string firstName;
+    std::string lastName;
     std::string username;
     std::string password;
     std::string address;
     double balance;
 
 public:
-    void setName(string name){
-        this->name=name;
+   // AccountData(string username,string password,string ID){
+    //}
+    void setID(string ID){
+       this->ID=ID;
+   }
+
+    void setFirstName(string firstName){
+        this->firstName=firstName;
+    }
+
+    void setLastName(string lastName){
+        this->lastName=lastName;
     }
 
     void setUserName(string username){
-    this->username=username;
+        this->username=username;
     }
 
     void setPass(string pass){
@@ -28,12 +41,20 @@ public:
         this->address=address;
     }
 
-    void setBalance(int balance){
+    void setBalance(double balance){
         this->balance=balance;
     }
 
-    string getName(){
-        return name;
+    string getID(){
+        return ID;
+    }
+
+    string getFirstName(){
+        return firstName;
+    }
+
+    string getLastName(){
+        return lastName;
     }
 
     string getUserName(){
@@ -54,27 +75,27 @@ public:
 
 };
 
-class Admin:public accountData{
+class Admin:public AccountData{
 private:
     string adminUsr, adminPass;
 public:
     Admin(){
         adminUsr="admin";
-        adminPass="lock90";
+        adminPass = "lock90";
     }
 
     void setAdminUsr(string usrname){
         adminUsr = usrname;
     }
 
-    void setPass(string pass){
+    void setAdminPass(string pass){
         adminPass=pass;
     }
 
     string getAdminUsr(){
         return adminUsr;
     }
-    string getPass(){
+    string getAdminPass(){
         return adminPass;
     }
 };
