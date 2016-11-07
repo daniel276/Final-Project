@@ -115,8 +115,8 @@ void add_Account(){
     cin >> lastname;
     cin.ignore();
 
-    cout << "ENTER ADDRESS,CITY,STATE : ";
-    getline(cin,address);
+    cout << "ENTER CITY : ";
+    cin >> address;
     cin.ignore();
 
     cout << "ENTER INITIAL BALANCE : $";

@@ -17,6 +17,7 @@ void account_Page();
 void check_Balance();
 void fund_Transfer();
 void select_Payment();
+void buy_Voucher();
 int exit_Select();
 string myID,myPass;
 
@@ -48,6 +49,7 @@ void main_Menu()
             break;
         case 2: forgot_password(); // if user input '2' then call function forgot_password
             break;
+        default :main_Menu();
 
     }
 }
@@ -195,7 +197,9 @@ void account_Page(){ // start func account_Page()
 
     cout << "Enter your choice: \n";
     int select;
+    cin >> select;
     while(select<0||select>6) {
+        cout << "INVALID INPUT";
         cin >> select;
     }
     switch(select){
@@ -209,7 +213,7 @@ void account_Page(){ // start func account_Page()
             break;
         case 5: exit_Select();
             break;
-
+        default:account_Page();
     }
     userAccount.close();
 }
@@ -225,10 +229,20 @@ void check_Balance() {
     clearScreen();
     cout << "---------------------------------------------------\n";
     cout << "                  YOUR BALANCE                    \n ";
+    cout << "ACCOUNT ID : " << myID;
+    cout << endl;
     cout << endl;
     cout << endl;
     cout << "\t\t" << "$"<< balance << endl;
     cout << "---------------------------------------------------\n";
+    cout << "PRESS Y TO RETURN MAIN MENU.. PRESS N TO EXIT PROGRAM\n";
+    int key = getch();
+    if(key=='y'||key=='Y'){
+        account_Page();
+    }
+    else {
+        exit_Select();
+    }
 
 }
 // end func account_Page()
@@ -242,7 +256,7 @@ void fund_Transfer() {
     string firstName, lastName, username, address;
     fstream userAccount;
     string myFileName = myID + ".txt";
-    userAccount.open(myID + ".txt", ios::in);
+    userAccount.open(myFileName, ios::in);
     userAccount >> firstName >> lastName >> username >> address >> balance;
     userAccount.close();
     string destID, destFirstName, destLastName, destUserName, destAddress;
@@ -285,7 +299,7 @@ void fund_Transfer() {
         c = getch();
         if (c == 'y' || c == 'Y') {
             balance-=amount;
-            userAccount.open(myID + ".txt", ios::out);
+            userAccount.open(myFileName, ios::out);
             userAccount << firstName << endl
                         << lastName << endl
                         << username << endl
@@ -293,16 +307,16 @@ void fund_Transfer() {
                         << balance << endl;
 
             destBalance += amount;
-            fstream dest;
-            dest.open(destFileName,ios::out);
-            dest << destFirstName << endl
+            fstream destNew;
+            destNew.open(destFileName,ios::out);
+            destNew << destFirstName << endl
                     << destLastName << endl
                     << destUserName << endl
                     << destAddress << endl
                     << destBalance << endl;
-            dest.close();
+            destNew.close();
             cout << "---------------------------------------------------\n";
-            cout << "FUND SUCCESSFULLY TRANSFERED\n";
+            cout << "TRANSACTION SUCCESS\n";
             cout << "TRANSFER DETAILS " << endl;
             cout << endl;
             cout << "RECEIVER NAME : " << destFullName << endl;
@@ -314,7 +328,7 @@ void fund_Transfer() {
         }
     } else {
         cout << "ACCOUNT ID NOT FOUND!" << endl;
-
+    }
         cout << "ENTER 1 TO MENU" << endl;
         cout << "ENTER 2 TO EXIT " << endl;
         int enter;
@@ -334,44 +348,123 @@ void fund_Transfer() {
                 cout << "ERROR";
                 break;
         }
-
-
-    }
 }
-
-
 void select_Payment(){
+    clearScreen();
     clearScreen();
     int choice;
     cout << "---------------------------------------------------\n";
-    cout << "BCA ONLINE PAYMENT"         << endl;
+    cout << "    BCA ONLINE PAYMENT"         << endl;
     cout << endl;
     cout << endl;
     cout <<"----------------------------------------------------\n";
-    cout << "1. BUY VOUCHER\n";
+    cout << "1. PREPAID VOUCHER\n";
     cout << "2. PAY ELECTRICITY\n";
     cout << "3. GO-PAY\n";
     cout << "Enter choice : ";
     cin >> choice;
     switch(choice){
+        case 1: buy_Voucher();
+            break;
+        case 2: cout <<"UNDER MAINTENANCE";
+            break;
+        case 3: cout << "UNDER MAINTENANCE";
+            break;
+        default:select_Payment();
+    }
+}
+
+void buy_Voucher(){
+    clearScreen();
+    int choice;
+    string phoneNum;
+    double amount = 0, balance = 0;
+    cout << "---------------------------------------------------\n";
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << "SELECT OPERATOR : \n";
+    cout << "1.TELKOMSEL" << endl;
+    cout << "---------------------------------------------------\n";
+    cout << "ENTER CHOICE: "<< endl;
+    cin >> choice;
+    if(choice==1){
+        clearScreen();
+        cout << "1. $2\n";
+        cout << "2. $5\n";
+        cout << "3. $10\n";
+        cout << "SELECT CHOICE : \n";
+        cin >> choice;
+        switch(choice){
+            case 1: amount=2;
+                break;
+            case 2 : amount=5;
+                break;
+            case 3: amount=10;
+                break;
+            default:buy_Voucher();
+        }
+
+        cout << "ENTER MOBILE PHONE NUMBER : \n";
+        cin >> phoneNum;
+
+        clearScreen();
+        cout << "---------------------------------------------------\n";
+        cout << "PREPAID VOUCHER DETAILS : "<<endl;
+        cout << endl;
+        cout << endl;
+        cout << "MOBILE PHONE : " << phoneNum << endl;
+        cout << "AMOUNT : $" << amount << endl;
+        cout << "$" << amount << " WILL BE DEDUCTED FROM YOUR ACCOUNT"<< endl;
+        cout << "---------------------------------------------------\n";
+        cout << "PRESS Y TO CONFIRM.. PRESS N TO CANCEL" << endl;
+        int yn=getch();
+        if(yn=='y'||yn=='Y'){
+            clearScreen();
+            string firstName, lastName, username, address;
+            string myFileName = myID + ".txt";
+            fstream userAccount;
+            userAccount.open(myFileName,ios::in);
+            userAccount >> firstName >> lastName >> username >> address >> balance;
+            userAccount.close();
+
+            userAccount.open(myFileName, ios::out);
+            balance -= amount;
+            userAccount << firstName << endl
+                        << lastName << endl
+                        << username << endl
+                        << address << endl
+                        << balance<< endl;
+            userAccount.close();
+            cout << "---------------------------------------------------\n";
+            cout << "TRANSACTION SUCCESS" << endl;
+            cout <<  endl;
+            cout << "MOBILE PHONE NUMBER : " << phoneNum << endl;
+            cout << "$" << amount << "HAS BEEN DEDUCTED FROM YOUR ACCOUNT" << endl;
+            cout << endl;
+            cout << "PRESS Y TO RETURN MAIN PAGE.. PRESS N TO EXIT PROGRAM\n";
+            int key = getch();
+            if(key=='y'||key=='Y'){
+                account_Page();
+            }
+            else{
+                exit_Select();
+            }
+        }
+        else if(yn=='n'||yn=='N'){
+            account_Page();
+        }
+
+
+
 
     }
+
 }
 
 
 int exit_Select(){
-
     cout << "Exit Now...";
     return 0;
 
 }
-
-
-
-
-/*void date_Time() {
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-	cout << dt;
-}*/
