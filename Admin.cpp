@@ -15,7 +15,7 @@ void searchData();
 void deleteData();
 string generateID();
 void clearScreen();
-int main2(){
+int main8(){
 
 
     login_Page();
@@ -105,7 +105,7 @@ void add_Account(){
 
     ofstream addRecord;
     addRecord.open("dataLogin.txt",ios::app);
-    addRecord << endl << username << " " << password << " " << id;
+    addRecord <<endl << username << " " << password << " " << id;
 
     addRecord.close();
 

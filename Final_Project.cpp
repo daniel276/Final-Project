@@ -15,12 +15,10 @@ void clearScreen();
 void account_Page();
 void check_Balance();
 void fund_Transfer();
-void confirm_Page();
 void select_Payment();
 int exit_Select();
 void acc_Settings();
 string myID,myPass;
-//void sleep(unsigned);
 
 int main()
 {
@@ -45,11 +43,6 @@ void main_Menu()
     cout << "2.\t FORGOT PASSWORD" << endl;
     cout << "Enter your choice (1-2)" << endl;
     cin >> choice;
-    while (choice <0 || choice >3) // Validate input
-    {
-        cout << "INVALID INPUT, PLEASE ENTER 1 OR 2 ONLY\n";
-        cin >> choice;
-    }
     switch (choice) {
         case 1:  login_page(); // if user input '1' then call function login_page
             break;
@@ -71,7 +64,7 @@ void login_page()
         cin.ignore();
         cout << "Enter Password : \n";	    			// prompt user to input username
         cin >> password;             				// store passLogin string
-
+        cin.ignore();
         validateLogin = login_validation(username,password);
 
         if(validateLogin) 						// if validateLogin accept true value then proceed
@@ -140,7 +133,6 @@ bool login_validation(string usrName, string pass) {
     string getUsrname, getPass, getID;
     ifstream data;
     data.open("dataLogin.txt");
-    // here open file to replace the test
     while (data >> getUsrname >> getPass >> getID) {
         if (usrName == getUsrname && pass == getPass) {
             valid = true;
@@ -162,17 +154,10 @@ void clearScreen() //function to clear the screen
 void account_Page(){ // start func account_Page()
     clearScreen();
     AccountData user;
-    string firstName,lastName,username,address;
     double balance;
-
+    string  firstName,lastName,username,address;
     ifstream userAccount;
-    if(userAccount.good()){
-        userAccount.open(myID+".txt");
-    }
-    else {
-        cout << "SOME FILES ARE MISSING. PLEASE CONTACT ADMINISTRATOR!.\n";
-    }
-
+    userAccount.open(myID+".txt");
     userAccount >> firstName >> lastName >> username >> address >> balance;
     user.setFirstName(firstName);
     user.setLastName(lastName);
@@ -198,6 +183,9 @@ void account_Page(){ // start func account_Page()
 
     cout << "Enter your choice: \n";
     int select;
+    while(select<0||select>6) {
+        cin >> select;
+    }
     switch(select){
         case 1: check_Balance();
             break;
@@ -219,47 +207,61 @@ void account_Page(){ // start func account_Page()
 }
 
 void check_Balance() {
-    clearScreen();
+    string  firstName,lastName,username,address;
     AccountData user;
+    double balance;
+    fstream userAccount;
+    userAccount.open(myID+".txt",ios::in);
+    userAccount >> firstName >> lastName >> username >> address >> balance;
 
+    clearScreen();
     cout << "---------------------------------------------------\n";
-    cout << "                  YOUR BALANCE                     \n";
+    cout << "                  YOUR BALANCE                    \n ";
     cout << endl;
     cout << endl;
-    cout << "\t\t\t " << user.getBalance() << endl;
+    cout << "\t\t" << "$"<< balance << endl;
     cout << "---------------------------------------------------\n";
 
 }
 // end func account_Page()
 
 
-void fund_Transfer(){
+void fund_Transfer() {
     clearScreen();
     AccountData user;
-    user.setBalance();
-    double getAmount,balance;
+    double Amount,myBalance;
     int c;
-    string destID, destFirstName, destLastName;
-    string fullName = destFirstName + destLastName;
+    string firstName,lastName,username,address,balance;
+    fstream userAccount;
+    userAccount.open(myID+".txt",ios::in);
+    userAccount >> firstName >> lastName >> username >> address >> balance;
+    balance = myBalance;
+    string destID, destFirstName, destLastName, destUserName, destAddress, destBalance;
+
     cout << "---------------------------------------------------\n";
     cout << "                  FUND TRANSFER                    \n";
-    cout <<  endl;
-    cout <<  endl;
-    cout <<  endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
     cout << "---------------------------------------------------\n";
-    cout << "ENTER AMOUNT TO TRANSFER : "<< endl;
-    cin >> getAmount;
+    cout << "ENTER AMOUNT TO TRANSFER : " << endl;
+    cin >> Amount;
+    while (Amount > myBalance) {
+        cout << "INSUFFICIENT FUND!";
+        cin >> Amount;
+    }
 
     clearScreen();
     cout << "ENTER DESTINATION ACCOUNT ID : " << endl;
+    ifstream search;
+    string destFullName = destFirstName + destLastName;
+    string destFileName = destID + ".txt";
+    search.open(destFileName);
+    search >> destFirstName >> destLastName >> destUserName >> destAddress >> destBalance;
     cin >> destID;
 
-    ifstream search;
-    string filename = destID+".txt";
-    search.open(filename);
-    search >> destFirstName >> destLastName >> destUsername >> destAddress >> destBalance;
 
-    if(search.good()){
+    if (search.good()) {
 
         cout << "---------------------------------------------------\n";
         cout << "                   FUND TRANSFER                   \n";
@@ -269,39 +271,73 @@ void fund_Transfer(){
         cout << "---------------------------------------------------\n";
         cout << "ACCOUNT ID RECEIVER : " << destID << endl;
         cout << "ACCOUNT ID Receiver Name : " << destFullName << endl;
-        cout << "TRANSFER AMOUNT : " << getAmount << endl;
-        cout << endl;
+        cout << "TRANSFER AMOUNT : " << Amount << endl;
+
         cout << "DO YOU WISH TO PROCEED ?" << endl;
         cout << "PRESS Y TO CONTINUE..." << endl;
         c = getch();
-        if(c=='y'||c=='Y'){
+        if (c == 'y' || c == 'Y') {
             string pass;
             cout << "---------------------------------------------------\n";
             cout << endl;
             cout << endl;
             cout << endl;
-            cout <<"ENTER YOUR PASSWORD TO CONFIRM.."<< endl;
+            cout << "ENTER YOUR PASSWORD TO CONFIRM TRANSACTION.." << endl;
             cin >> pass;
 
-            if(pass==myPass){
-                balance-=-getAmount;
+            if (pass == myPass) {
+                myBalance -= Amount;
+                destBalance += Amount;
+                ofstream writeMy;
+                writeMy.open(myID+".txt",ios::app);
+                writeMy << myBalance;
+                writeMy.close();
 
+                cout << "---------------------------------------------------\n";
+                cout << "FUND SUCCESSFULLY TRANSFERED";
+                cout << "TRANSFER DETAILS " << endl;
+                cout << endl;
+                cout << "RECEIVER NAME : " << destFullName << endl;
+                cout << "AMOUNT TRANSFERED : " << Amount << endl;
+                cout << endl;
+                cout << "ENTER 1 TO MENU" << endl;
+                cout << "ENTER 2 TO EXIT " << endl;
+                int enter;
+                while (enter < 0 || enter > 3) {
+                    switch (enter) {
+                        case 1:
+                            account_Page();
+                            break;
+                        case 2:
+                            exit_Select();
+                            break;
+                        default:
+                            cout << "ERROR";
+                            break;
+                    }
 
+                }
             }
         }
 
     }
-
 }
 
-void confirm_Page(){
-    AccountData user;
-
-
-}
 
 void select_Payment(){
+    int choice;
+    cout << "---------------------------------------------------\n";
+    cout << "\t\t\tPAYMENT" << endl;
+    cout << endl;
+    cout << endl;
+    cout << "1. BUY VOUCHER\n";
+    cout << "2. PAY ELECTRICITY\n";
+    cout << "3. GO-PAY\n";
+    cout << "Enter choice : ";
+    cin >> choice;
+    switch(choice){
 
+    }
 }
 
 void acc_Settings(){

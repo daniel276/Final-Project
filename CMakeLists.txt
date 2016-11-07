@@ -9,4 +9,5 @@ set(SOURCE_FILES
 
 add_executable(Final_Project ${SOURCE_FILES})
 add_executable(Admin Admin.cpp)
-add_executable(1 1.cpp)
+add_executable(test-only test-only.cpp)
+
