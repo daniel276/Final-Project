@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <conio.h>
+#include <sstream>
 #include "accountData.h" // call header file accountData.h which contain struct and link to here.
 
 void main_Menu();
@@ -17,7 +18,6 @@ void check_Balance();
 void fund_Transfer();
 void select_Payment();
 int exit_Select();
-void acc_Settings();
 string myID,myPass;
 
 int main()
@@ -81,6 +81,7 @@ void login_page()
 
 void forgot_password()
 {
+    string username,id;
     bool goOn=false; // initial value set to false
     int choice; // variable to store user's choice
     clearScreen(); // call clearScreen function
@@ -92,12 +93,25 @@ void forgot_password()
     srand(seed);
 
     ticketNumber = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE; // formula to generate random-number
+    stringstream ss;
+    ss << ticketNumber;
+    string ticket;
+    ss >> ticket;
     cout << "--------------------------------------------\n";           // display
     cout << "          WE'VE MADE YOU A TICKET           \n";           // display
-    cout << "\t  Ticket Number : " << ticketNumber << endl;            // display
-    cout << "PLEASE KEEP THIS TICKET NUMBER TO CONTACT US.\n";          // display
+    cout << "     Ticket Number : " << ticketNumber  <<   endl;            // display
+    cout << "              STATUS : OPEN                 \n";
+    cout << "         PLEASE KEEP THIS TICKET.           \n";          // display
     cout << "--------------------------------------------\n";           // display
-
+    cout << "ENTER USERNAME : ";
+    cin >> username;
+    cout << "ENTER ACCOUNT ID : ";
+    cin >> id;
+    fstream make;
+    make.open("ticket_"+ticket+".txt",ios::out);
+    make << "USERNAME :"<< username << endl
+         << "ACCOUNT ID : "<< id << endl
+         << "TICKET NUMBER : "<< ticket << endl;
 
     do {        // do start
 
@@ -176,9 +190,8 @@ void account_Page(){ // start func account_Page()
     cout << "1. CHECK BALANCE \n";
     cout << "2. FUNDS TRANSFER \n";
     cout << "3. SELECT PAYMENTS \n";
-    cout << "4. ACCOUNT SETTINGS \n";
-    cout << "5. LOG OUT\n";
-    cout << "6. EXIT \n";
+    cout << "4. LOG OUT\n";
+    cout << "5. EXIT \n";
 
     cout << "Enter your choice: \n";
     int select;
@@ -192,17 +205,13 @@ void account_Page(){ // start func account_Page()
             break;
         case 3: select_Payment();
             break;
-        case 4: acc_Settings();
+        case 4: clearScreen();main_Menu();
             break;
-        case 5: main_Menu();
-            break;
-        case 6: exit_Select();
+        case 5: exit_Select();
             break;
 
     }
-
     userAccount.close();
-
 }
 
 void check_Balance() {
@@ -228,15 +237,15 @@ void check_Balance() {
 void fund_Transfer() {
     clearScreen();
     AccountData user;
-    double Amount, myBalance;
+    double amount, balance,destBalance;
     int c;
-    string firstName, lastName, username, address, balance;
+    string firstName, lastName, username, address;
     fstream userAccount;
+    string myFileName = myID + ".txt";
     userAccount.open(myID + ".txt", ios::in);
     userAccount >> firstName >> lastName >> username >> address >> balance;
-    balance = myBalance;
-    string destID, destFirstName, destLastName, destUserName, destAddress, destBalance;
-
+    userAccount.close();
+    string destID, destFirstName, destLastName, destUserName, destAddress;
     cout << "---------------------------------------------------\n";
     cout << "                  FUND TRANSFER                    \n";
     cout << endl;
@@ -244,25 +253,22 @@ void fund_Transfer() {
     cout << endl;
     cout << "---------------------------------------------------\n";
     cout << "ENTER AMOUNT TO TRANSFER : " << endl;
-    cin >> Amount;
-    while (Amount > myBalance) {
+    cin >> amount;
+    while (amount >= balance) {
         cout << "INSUFFICIENT FUND!";
-        cin >> Amount;
+        cin >> amount;
     }
 
     clearScreen();
     cout << "ENTER DESTINATION ACCOUNT ID : " << endl;
     cin >> destID;
-    ifstream search;
-
+    ifstream dest;
     string destFileName = destID + ".txt";
-    search.open(destFileName);
-    search >> destFirstName >> destLastName >> destUserName >> destAddress >> destBalance;
+    dest.open(destFileName);
+    dest >> destFirstName >> destLastName >> destUserName >> destAddress >> destBalance;
     string destFullName = destFirstName + " " + destLastName;
-
-
-    if (search.good()) {
-
+    if (dest.is_open()) {
+        dest.close();
         cout << "---------------------------------------------------\n";
         cout << "                   FUND TRANSFER                   \n";
         cout << endl;
@@ -271,19 +277,36 @@ void fund_Transfer() {
         cout << "---------------------------------------------------\n";
         cout << "ACCOUNT ID RECEIVER : " << destID << endl;
         cout << "ACCOUNT NAME : " << destFullName << endl;
-        cout << "TRANSFER AMOUNT : $" << Amount << endl;
+        cout << "TRANSFER AMOUNT : $" << amount << endl;
 
         cout << "DO YOU WISH TO PROCEED ?" << endl;
         cout << "PRESS Y TO CONTINUE..." << endl;
         cout << "PRESS N TO CANCEL";
         c = getch();
         if (c == 'y' || c == 'Y') {
+            balance-=amount;
+            userAccount.open(myID + ".txt", ios::out);
+            userAccount << firstName << endl
+                        << lastName << endl
+                        << username << endl
+                        << address << endl
+                        << balance << endl;
+
+            destBalance += amount;
+            fstream dest;
+            dest.open(destFileName,ios::out);
+            dest << destFirstName << endl
+                    << destLastName << endl
+                    << destUserName << endl
+                    << destAddress << endl
+                    << destBalance << endl;
+            dest.close();
             cout << "---------------------------------------------------\n";
             cout << "FUND SUCCESSFULLY TRANSFERED\n";
             cout << "TRANSFER DETAILS " << endl;
             cout << endl;
             cout << "RECEIVER NAME : " << destFullName << endl;
-            cout << "AMOUNT TRANSFERED : " << Amount << endl;
+            cout << "AMOUNT TRANSFERED : " << amount << endl;
             cout << "---------------------------------------------------\n";
 
         } else if (c == 'n' || c == 'N') {
@@ -318,11 +341,13 @@ void fund_Transfer() {
 
 
 void select_Payment(){
+    clearScreen();
     int choice;
     cout << "---------------------------------------------------\n";
-    cout << "\t\t\tPAYMENT" << endl;
+    cout << "BCA ONLINE PAYMENT"         << endl;
     cout << endl;
     cout << endl;
+    cout <<"----------------------------------------------------\n";
     cout << "1. BUY VOUCHER\n";
     cout << "2. PAY ELECTRICITY\n";
     cout << "3. GO-PAY\n";
@@ -333,9 +358,6 @@ void select_Payment(){
     }
 }
 
-void acc_Settings(){
-
-}
 
 int exit_Select(){
 

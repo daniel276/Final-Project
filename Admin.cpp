@@ -79,8 +79,6 @@ void admin_Page() {
             break;
         case 3: exit_select();
             break;
-        case 4: deleteData();
-            break;
         default: cout << "ERROR";
             break;
 
@@ -178,7 +176,7 @@ void searchData(){
     clearScreen();
     ifstream search;
     string id, first,last, username, address, balance;
-    cout << "PLEASE ENTER ACCOUNT'S ID ";
+    cout << "PLEASE ENTER ACCOUNT'S ID : ";
     cin >> id;
     cin.ignore();
     search.open(id+".txt");
@@ -187,31 +185,50 @@ void searchData(){
         while(search >> first>> last >> username >> address >> balance);
         cout << "ACCOUNT ID : " << id << endl;
         cout << "FULL NAME : " << first+" "+ last << endl;
-        cout << "Address : " << address << endl;
-        cout << "Balance : " << balance << endl;
+        cout << "ADDRESS : " << address << endl;
+        cout << "BALANCE : $" << balance << endl;
+        cout << "PRESS Y TO MAIN MENU";
+        int y=getch();
+        if(y=='y'||'Y'){
+            admin_Page();
+        }
+        else{
+            cout << "PROGRAM ABORT";
+        }
     }
 else {
-        cout << "File Not Found!." << endl;
+        cout << "FILE NOT FOUND!." << endl;
+        cout << "PRESS 1 TO MAIN MENU";
+        cout << "PRESS 2 TO EXIT";
+        int choice;
+        cin >> choice;
+        while(choice<0&&choice>3){
+            cout << "INVALID INPUT";
+            cin >> choice;
+        }
+        switch(choice){
+            case 1:admin_Page();
+                break;
+            case 2:exit_select();
+                break;
+        }
+
     }
     search.close();
 }
 
 void deleteData(){
     clearScreen();
-    string filename;
-    char input;
-    bool open=false;
+    string file;
+    int input;
     ifstream check;
     cout << "Delete Data" << endl;
-    while(!open){
-        open = check.is_open();
     cout << "Enter ACCOUNT ID : "<< endl;
-    cin >> filename;
-    check.open(filename+".txt");
+    cin >> file;
+    string filename = file+".txt";
+    check.open(filename);
 
-    }
-
-    if(open){
+    if(check.is_open()){
         cout << "DO YOU WISH TO DELETE ACCOUNT " << endl;
         cout << filename << endl;
         cout << "PRESS y/Y TO DELETE" << endl;
