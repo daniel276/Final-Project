@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
     accountData.h
-    Final_Project.cpp 1.cpp)
+    Final_Project.cpp test-only.cpp)
 
 add_executable(Final_Project ${SOURCE_FILES})
 add_executable(Admin Admin.cpp)

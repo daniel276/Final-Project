@@ -15,7 +15,7 @@ void searchData();
 void deleteData();
 string generateID();
 void clearScreen();
-int main8(){
+int main2(){
 
 
     login_Page();
@@ -148,6 +148,7 @@ void add_Account(){
     cout << "ENTER 1 TO MAIN MENU\n";
     cout << "ENTER 2 TO EXIT\n";
     int choice;
+    cin >> choice;
     switch(choice){
         case 1 :login_Page();
             break;

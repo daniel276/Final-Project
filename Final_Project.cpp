@@ -136,12 +136,11 @@ bool login_validation(string usrName, string pass) {
     while (data >> getUsrname >> getPass >> getID) {
         if (usrName == getUsrname && pass == getPass) {
             valid = true;
+            getPass = myPass;
             break;
         }
     }
     myID = getID;
-    getPass=myPass;
-    data.close();
     return valid;
 
 }
@@ -173,7 +172,7 @@ void account_Page(){ // start func account_Page()
     cout << endl;
     cout << "---------------------------------------------------\n";
 
-
+    cout << myPass;
     cout << "1. CHECK BALANCE \n";
     cout << "2. FUNDS TRANSFER \n";
     cout << "3. SELECT PAYMENTS \n";
@@ -229,11 +228,11 @@ void check_Balance() {
 void fund_Transfer() {
     clearScreen();
     AccountData user;
-    double Amount,myBalance;
+    double Amount, myBalance;
     int c;
-    string firstName,lastName,username,address,balance;
+    string firstName, lastName, username, address, balance;
     fstream userAccount;
-    userAccount.open(myID+".txt",ios::in);
+    userAccount.open(myID + ".txt", ios::in);
     userAccount >> firstName >> lastName >> username >> address >> balance;
     balance = myBalance;
     string destID, destFirstName, destLastName, destUserName, destAddress, destBalance;
@@ -253,12 +252,13 @@ void fund_Transfer() {
 
     clearScreen();
     cout << "ENTER DESTINATION ACCOUNT ID : " << endl;
+    cin >> destID;
     ifstream search;
-    string destFullName = destFirstName + destLastName;
+
     string destFileName = destID + ".txt";
     search.open(destFileName);
     search >> destFirstName >> destLastName >> destUserName >> destAddress >> destBalance;
-    cin >> destID;
+    string destFullName = destFirstName + " " + destLastName;
 
 
     if (search.good()) {
@@ -270,55 +270,48 @@ void fund_Transfer() {
         cout << endl;
         cout << "---------------------------------------------------\n";
         cout << "ACCOUNT ID RECEIVER : " << destID << endl;
-        cout << "ACCOUNT ID Receiver Name : " << destFullName << endl;
-        cout << "TRANSFER AMOUNT : " << Amount << endl;
+        cout << "ACCOUNT NAME : " << destFullName << endl;
+        cout << "TRANSFER AMOUNT : $" << Amount << endl;
 
         cout << "DO YOU WISH TO PROCEED ?" << endl;
         cout << "PRESS Y TO CONTINUE..." << endl;
+        cout << "PRESS N TO CANCEL";
         c = getch();
         if (c == 'y' || c == 'Y') {
-            string pass;
             cout << "---------------------------------------------------\n";
+            cout << "FUND SUCCESSFULLY TRANSFERED\n";
+            cout << "TRANSFER DETAILS " << endl;
             cout << endl;
-            cout << endl;
-            cout << endl;
-            cout << "ENTER YOUR PASSWORD TO CONFIRM TRANSACTION.." << endl;
-            cin >> pass;
+            cout << "RECEIVER NAME : " << destFullName << endl;
+            cout << "AMOUNT TRANSFERED : " << Amount << endl;
+            cout << "---------------------------------------------------\n";
 
-            if (pass == myPass) {
-                myBalance -= Amount;
-                destBalance += Amount;
-                ofstream writeMy;
-                writeMy.open(myID+".txt",ios::app);
-                writeMy << myBalance;
-                writeMy.close();
-
-                cout << "---------------------------------------------------\n";
-                cout << "FUND SUCCESSFULLY TRANSFERED";
-                cout << "TRANSFER DETAILS " << endl;
-                cout << endl;
-                cout << "RECEIVER NAME : " << destFullName << endl;
-                cout << "AMOUNT TRANSFERED : " << Amount << endl;
-                cout << endl;
-                cout << "ENTER 1 TO MENU" << endl;
-                cout << "ENTER 2 TO EXIT " << endl;
-                int enter;
-                while (enter < 0 || enter > 3) {
-                    switch (enter) {
-                        case 1:
-                            account_Page();
-                            break;
-                        case 2:
-                            exit_Select();
-                            break;
-                        default:
-                            cout << "ERROR";
-                            break;
-                    }
-
-                }
-            }
+        } else if (c == 'n' || c == 'N') {
+            fund_Transfer();
         }
+    } else {
+        cout << "ACCOUNT ID NOT FOUND!" << endl;
+
+        cout << "ENTER 1 TO MENU" << endl;
+        cout << "ENTER 2 TO EXIT " << endl;
+        int enter;
+        cin >> enter;
+        while (enter < 0 || enter > 2) {
+            cout << "ENTER 1 OR 2 ONLY!";
+            cin >> enter;
+        }
+        switch (enter) {
+            case 1:
+                account_Page();
+                break;
+            case 2:
+                exit_Select();
+                break;
+            default:
+                cout << "ERROR";
+                break;
+        }
+
 
     }
 }
