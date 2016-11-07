@@ -21,7 +21,7 @@ void buy_Voucher();
 int exit_Select();
 string myID,myPass;
 
-int main()
+int main2()
 {
     clearScreen();
     main_Menu(); // call main_menu();

@@ -11,19 +11,13 @@ void login_Page();
 void admin_Page();
 int exit_select();
 void add_Account();
-void searchData();
-void deleteData();
-string generateID();
+void search_Data();
+string generate_ID();
 void clearScreen();
-int main2(){
-
-
+int main(){
     login_Page();
-
     return 0;
 }
-
-
 
 bool validate_Login(string username, string password) {
     Admin get;
@@ -35,8 +29,6 @@ bool validate_Login(string username, string password) {
         return false;
     }
 }
-
-
 
 void login_Page() {
     bool loginValidation;
@@ -75,7 +67,7 @@ void admin_Page() {
     switch(choice){
         case 1: add_Account();
             break;
-        case 2: searchData();
+        case 2: search_Data();
             break;
         case 3: exit_select();
             break;
@@ -88,7 +80,7 @@ void admin_Page() {
 void add_Account(){
     clearScreen();
     AccountData getData;
-    string id = generateID();
+    string id = generate_ID();
     string firstName,lastname,username,password,address;
     double balance;
 
@@ -141,7 +133,7 @@ void add_Account(){
 
     clearScreen();
     cout << "ACCOUNT SUCCESSFULLY CREATED!.\n";
-    cout << "ACCOUNT ID : " << id;
+    cout << "ACCOUNT ID : " << id << endl;
 
     cout << "ENTER 1 TO MAIN MENU\n";
     cout << "ENTER 2 TO EXIT\n";
@@ -157,7 +149,7 @@ void add_Account(){
 
 }
 
-string generateID(){
+string generate_ID(){
     ostringstream get;
     const int MIN_VALUE = 100000000; // set min value of random-number generated
     const int MAX_VALUE = 999999999; // max value of random-numer generated
@@ -172,7 +164,7 @@ string generateID(){
 
 }
 
-void searchData(){
+void search_Data(){
     clearScreen();
     ifstream search;
     string id, first,last, username, address, balance;
@@ -189,7 +181,7 @@ void searchData(){
         cout << "BALANCE : $" << balance << endl;
         cout << "PRESS Y TO MAIN MENU";
         int y=getch();
-        if(y=='y'||'Y'){
+        if(y=='y'||y=='Y'){
             admin_Page();
         }
         else{
@@ -211,33 +203,11 @@ else {
                 break;
             case 2:exit_select();
                 break;
+            default:admin_Page();
         }
 
     }
     search.close();
-}
-
-void deleteData(){
-    clearScreen();
-    string file;
-    int input;
-    ifstream check;
-    cout << "Delete Data" << endl;
-    cout << "Enter ACCOUNT ID : "<< endl;
-    cin >> file;
-    string filename = file+".txt";
-    check.open(filename);
-
-    if(check.is_open()){
-        cout << "DO YOU WISH TO DELETE ACCOUNT " << endl;
-        cout << filename << endl;
-        cout << "PRESS y/Y TO DELETE" << endl;
-        input = getch();
-             if(input=='y'||input=='Y'){
-                 remove(filename.c_str());
-             }
-    }
-    cout << "ACCOUNT SUCCESSFULLY DELETED!" << endl;
 }
 
 int exit_select(){
